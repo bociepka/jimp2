@@ -1441,7 +1441,11 @@ void SetInjectableArgvs(const ::std::vector<testing::internal::string>*
 
 // Defines synchronization primitives.
 #if GTEST_IS_THREADSAFE
+<<<<<<< HEAD
 # if GTEST_HAS_PTHREAD && !GTEST_OS_WINDOWS_MINGW
+=======
+#if GTEST_HAS_PTHREAD && !GTEST_OS_WINDOWS_MINGW
+>>>>>>> 8adb4be13e4b76b9affae3451f414bd560b4d34d
 // Sleeps for (roughly) n milliseconds.  This function is only for testing
 // Google Test's own constructs.  Don't use it in user tests, either
 // directly or indirectly.
