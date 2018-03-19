@@ -12,6 +12,6 @@ int main(){
         cout << "Podaj wyraz do sprawdzenia:";
         string str;
         cin >> str;
-        cout << endl << is_palindrome(str) << endl;
+        cout << endl << IsPalindrome(str) << endl;
     }
 }

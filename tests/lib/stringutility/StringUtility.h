@@ -31,7 +31,7 @@ std::string ToString(const std::vector<T> &v) {
   std::vector<std::string> tmp;
   std::stringstream ss;
   ss << "[";
-  std::transform(begin(v), end(v), std::back_inserter(tmp), [](const auto &str) { return ToString(str); });
+  std::transform(begin(v), end(v), std::back_inserter(tmp), [](const T &str) { return ToString(str); });
   std::copy(begin(tmp), end(tmp), std::ostream_iterator<std::string>(ss, ", "));
   ss << "]";
   return ss.str();
@@ -42,7 +42,7 @@ std::string ToString(const std::set<T> &v) {
   std::vector<std::string> tmp;
   std::stringstream ss;
   ss << "[";
-  std::transform(begin(v), end(v), std::back_inserter(tmp), [](const auto &str) { return ToString(str); });
+  std::transform(begin(v), end(v), std::back_inserter(tmp), [](const T &str) { return ToString(str); });
   std::copy(begin(tmp), end(tmp), std::ostream_iterator<std::string>(ss, ", "));
   ss << "]";
   return ss.str();
