@@ -5,43 +5,32 @@
 #ifndef JIMP_EXERCISES_SIMPLEJSON_H
 #define JIMP_EXERCISES_SIMPLEJSON_H
 
-#include <string>
-#include <iostream>
-#include <vector>
-#include <map>
 #include <experimental/optional>
 #include <string>
-using ::std::vector;
-using ::std::map;
-using ::std::cout;
-using ::std::endl;
-using ::std::string;
-using ::std::literals::operator""s;
+#include <map>
+#include <vector>
 
-namespace nets{
-class JsonValue{
-public:
-    JsonValue();
-    JsonValue(int int_input);
-    JsonValue(double double_input);
-    JsonValue(bool bool_input);
-    JsonValue(string string_input);
-    JsonValue(vector <JsonValue> vector_input);
-    JsonValue(map <string, JsonValue> map_input);
-    ~JsonValue();
-
-    std::experimental::optional<JsonValue> ValueByName(const std::string &name) const;
-    std::string ToString() const;
-
-private:
-    std::experimental::optional<std::string>  value_string;
-    std::experimental::optional<int>  value_int;
-    std::experimental::optional<double>  value_double;
-    std::experimental::optional<bool>  value_bool;
-    std::experimental::optional<std::vector<JsonValue>> value_vector;
-    std::experimental::optional<std::map <std::string, JsonValue>> value_map;
-};
+namespace nets {
+    class JsonValue {
+    public:
+        JsonValue();
+        JsonValue(std::string string_input);
+        JsonValue(int int_input);
+        JsonValue(double double_input);
+        JsonValue(bool bool_input);
+        JsonValue(std::vector<JsonValue> vector_input);
+        JsonValue(std::map<std::string,JsonValue> map_input);
+        std::experimental::optional<JsonValue> ValueByName(const std::string &name) const;
+        std::string ToString() const;
+    private:
+        std::string string_value;
+        int int_value=NULL;
+        double double_value=NULL;
+        bool bool_value=NULL;
+        std::vector<JsonValue> vector_value;
+        std::map<std::string,JsonValue> map_value;
+    };
+    std::string string_change(std::string str);
 }
-
 
 #endif //JIMP_EXERCISES_SIMPLEJSON_H
