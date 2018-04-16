@@ -16,7 +16,7 @@ add_gtest_with_memleak(zipper libzipper)
 #######################################################################
 ##  ALL TESTS
 #######################################################################
-add_executable(lab6_all_tests ${SOURCE_FILES})
+add_executable(lab6_all_tests ${SOURCE_FILES} ../../lab6/wordcounter/WordCounter.cpp ../../lab6/wordcounter/WordCounter.h ../../lab6/wordcounter/main.cpp)
 
 target_link_libraries(lab6_all_tests ${GTEST_LIBS})
 target_link_libraries(lab6_all_tests libstudentrepository)
