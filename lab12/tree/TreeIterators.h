@@ -2,195 +2,204 @@
 // Created by Bartek on 04.06.2018.
 //
 
-#ifndef JIMP_EXERCISES_TREEITERATORS_H
-#define JIMP_EXERCISES_TREEITERATORS_H
-
+#ifndef JIMP_EXERCISES_TREEITERATOR_H
+#define JIMP_EXERCISES_TREEITERATOR_H
 #include "Tree.h"
 #include <vector>
 
-namespace tree{
-    template <class T>
-    class PreOrder{
+using namespace std;
 
-    };
+namespace tree {
+
+    //INORDER
+
+
+    template <class T>
+    void InOrderVector(Tree<T> *tree, std::vector<Tree<T> *> &vector){
+        if(tree->Left()) InOrderVector(tree->Left(),vector);
+        vector.push_back(tree);
+        if(tree->Right()) InOrderVector(tree->Right(),vector);
+    }
 
     template<class T>
-    class PreOrderTreeIterator {
+    class InOrderTreeIterator;
+
+    template <class T>
+    class InOrderTreeView{
+        Tree<T> *tree_;
     public:
-        PreOrderTreeIterator() {}
-
-        ~PreOrderTreeIterator() {}
-
-        PreOrderTreeIterator(/*const Tree<T> &node*/Tree<T> node) {
-            pointer_ = node;
+        InOrderTreeView(Tree<T> *tree) : tree_(tree) {};
+        InOrderTreeIterator<T> begin(){
+            InOrderTreeIterator<T> new_it(tree_->Root());
+            return new_it;
         }
-
-        /*void operator()(const Tree<T> &node) {
-            pointer_ = std::make_shared<Tree<T>>(node);
-        }*/
-
-
-        /*void SortChildren(const Tree<T> &node){
-            Tree<T> leftchild = *(node.GetLeft()).get();
-            Tree<T> rightchild = *(node.GetRight()).get();
-            children_pre_order_.push_back(node);
-            if(node.GetLeft()!=nullptr){
-                SortChildren(*node.GetLeft().get());
-            }
-            if(node.GetRight()!=nullptr){
-                SortChildren(leftchild);
-            }
-            //    for(std::shared_ptr<Tree<T>> i=children_pre_order_.begin(); i<children_pre_order_.end(); i++){
-            //        std::cout<< (*i.get()).Value()<<std::endl;
-            //   }
+        InOrderTreeIterator<T> end(){
+            InOrderTreeIterator<T> new_it(tree_->Root());
+            new_it.ToEnd();
+            return new_it;
         }
-*/
-        /*PreOrderTreeIterator &operator++() {
-            //SortChildren(*pointer_.get());
-            //bool found = false;
-            //std::vector<Tree<T>> helping_vector = pointer_.Get_Vector();
-            for (const auto &a:  children_pre_order_) {
-                std::shared_ptr<Tree<T>> ptr = std::make_shared<Tree<T>>(a);
-                std::cout << "to value" << (*ptr.get()).Value() << std::endl;
-                if (found) {
-                    pointer_ = std::make_shared<Tree<T>>(a);
-                    break;
-                }
-                if (std::make_shared<Tree<T>>(a) == pointer_) {
-                    found = true;
-                }
-                return *this;
-            return pointer_.Get_Vector().find(pointer_).next();
-        }*/
-
-
-        //pointer_=(*pointer_.get()).GetLeft();
-        //  InOrderTreeIterator <T> parent = *this;
-
-        /*  T operator*() {
-              return (*pointer_.get()).Value();
-          }*/
-
-        /*   bool operator!=(const PreOrderTreeIterator &iterator2) const {
-               return *pointer_.get() != *iterator2.pointer_.get();;
-           }*/
-
-        /*void SortChildren2(const std::shared_ptr<Tree<T>> &pointer){
-            Tree<T> leftchild = *((*pointer.get()).GetLeft()).get();
-            Tree<T> rightchild = *((*pointer.get()).GetRight()).get();
-            children_pre_order_.push_back(*pointer.get());
-            if((*pointer.get()).GetLeft()!=nullptr){
-                SortChildren(std::make_shared<Tree<T>>(leftchild));
-            }
-            if((*pointer.get()).GetRight()!=nullptr){
-                SortChildren(std::make_shared<Tree<T>>(rightchild));
-            }
-            //    for(std::shared_ptr<Tree<T>> i=children_pre_order_.begin(); i<children_pre_order_.end(); i++){
-            //        std::cout<< (*i.get()).Value()<<std::endl;
-            //   }
-        */
-
-
-    private:
-        Tree<T> pointer_;
-        //int vector_iterator_ = 0;
-
     };
 
     template<class T>
-    class PreOrderTreeView{};
+    InOrderTreeView<T> InOrder(Tree<T> *tree);
 
-
-
-
-
-
+    template<class T>
+    InOrderTreeView<T> InOrder(Tree<T> *tree) {
+        return InOrderTreeView<T>(tree);
+    }
 
     template <class T>
-    class InOrder{
-
-    };
-
-    template<class T>
     class InOrderTreeIterator{
+        void ToEnd(){
+            it_ = (int) vector_.size();
+        }
+        vector<Tree<T> *> vector_;
+        int it_;
     public:
-        InOrderTreeIterator(){}
-        ~InOrderTreeIterator(){}
-        InOrderTreeIterator(const Tree<T> &node){
-            pointer_ = std::make_shared<Tree<T>>(node);
+        InOrderTreeIterator(Tree<T> *tree) : it_(0) {
+            InOrderVector<T>(tree, vector_);
         }
-
-        void operator()(const Tree<T> &node){
-            pointer_ = std::make_shared<Tree<T>>(node);
-        }
-
-        void operator++(){
-            //  InOrderTreeIterator <T> parent = *this;
-        }
-
         T operator*(){
-            return (*pointer_.get()).Value();
+            return vector_[it_]->Value();
         }
-
-        bool operator!=(InOrderTreeIterator &iterator2){
-            return pointer_!=iterator2.pointer_;
+        InOrderTreeIterator<T> &operator++() {
+            ++it_;
+            return *this;
         }
+        bool operator!=(const InOrderTreeIterator<T> &one) const{
+            return it_ != one.it_;
+        }
+        friend class InOrderTreeView<T>;
+    };
 
-    private:
-        std::shared_ptr<Tree<T>> pointer_;
+
+
+    //PREORDER
+
+    template <class T>
+    void PreOrderVector(Tree<T> *tree, std::vector<Tree<T> *> &vector){
+        vector.push_back(tree);
+        if(tree->Left()) PreOrderVector(tree->Left(),vector);
+        if(tree->Right()) PreOrderVector(tree->Right(),vector);
+
+    }
+
+    template<class T>
+    class PreOrderTreeIterator;
+
+    template <class T>
+    class PreOrderTreeView{
+        Tree<T> *tree_;
+    public:
+        PreOrderTreeView(Tree<T> *tree) : tree_(tree) {};
+        PreOrderTreeIterator<T> begin(){
+            PreOrderTreeIterator<T> new_preit(tree_->Root());
+            return new_preit;
+        }
+        PreOrderTreeIterator<T> end(){
+            PreOrderTreeIterator<T> new_preit(tree_->Root());
+            new_preit.ToEnd();
+            return new_preit;
+        }
     };
 
     template<class T>
-    class InOrderTreeView{};
+    PreOrderTreeView<T> PreOrder(Tree<T> *tree);
+
+    template<class T>
+    PreOrderTreeView<T> PreOrder(Tree<T> *tree) {
+        return PreOrderTreeView<T>(tree);
+    }
+
+    template <class T>
+    class PreOrderTreeIterator{
+        void ToEnd(){
+            it_ = (int) vector_.size();
+        }
+        vector<Tree<T> *> vector_;
+        int it_;
+    public:
+        PreOrderTreeIterator(Tree<T> *tree) : it_(0) {
+            PreOrderVector<T>(tree, vector_);
+        }
+        T operator*(){
+            return vector_[it_]->Value();
+        }
+        PreOrderTreeIterator<T> &operator++() {
+            ++it_;
+            return *this;
+        }
+        bool operator!=(const PreOrderTreeIterator<T> &one) const{
+            return it_ != one.it_;
+        }
+        friend class PreOrderTreeView<T>;
+    };
 
 
-
-
+    //POSTORDER
 
 
     template <class T>
-    class PostOrder{
+    void PostOrderVector(Tree<T> *tree, vector<Tree<T> *> &vector){
+        if(tree->Left()) PostOrderVector(tree->Left(),vector);
+        if(tree->Right()) PostOrderVector(tree->Right(),vector);
+        vector.push_back(tree);
 
-    };
+    }
 
     template<class T>
-    class PostOrderTreeIterator{
+    class PostOrderTreeIterator;
+
+    template <class T>
+    class PostOrderTreeView{
+        Tree<T> *tree_;
     public:
-        PostOrderTreeIterator(){}
-        ~PostOrderTreeIterator(){}
-        PostOrderTreeIterator(const Tree<T> &node){
-            pointer_ = std::make_shared<Tree<T>>(node);
+        PostOrderTreeView(Tree<T> *tree) : tree_(tree) {};
+        PostOrderTreeIterator<T> begin(){
+            PostOrderTreeIterator<T> new_it(tree_->Root());
+            return new_it;
         }
-
-        void operator()(const Tree<T> &node){
-            pointer_ = std::make_shared<Tree<T>>(node);
+        PostOrderTreeIterator<T> end(){
+            PostOrderTreeIterator<T> new_it(tree_->Root());
+            new_it.ToEnd();
+            return new_it;
         }
-
-        void operator++(){
-            //  InOrderTreeIterator <T> parent = *this;
-        }
-
-        T operator*(){
-            return (*pointer_.get()).Value();
-        }
-
-        bool operator!=(PostOrderTreeIterator &iterator2){
-            return pointer_!=iterator2.pointer_;
-        }
-
-    private:
-        std::shared_ptr<Tree<T>> pointer_;
     };
 
     template<class T>
-    class PostOrderTreeView{};
+    PostOrderTreeView<T> PostOrder(Tree<T> *tree);
 
+    template<class T>
+    PostOrderTreeView<T> PostOrder(Tree<T> *tree) {
+        return PostOrderTreeView<T>(tree);
+    }
 
+    template <class T>
+    class PostOrderTreeIterator{
+        void ToEnd(){
+            it_ = (int) vector_.size();
+        }
+        vector<Tree<T> *> vector_;
+        int it_;
+    public:
+        PostOrderTreeIterator(Tree<T> *tree) : it_(0) {
+            PostOrderVector<T>(tree, vector_);
+        }
+        T operator*(){
+            return vector_[it_]->Value();
+        }
+        PostOrderTreeIterator<T> &operator++() {
+            ++it_;
+            return *this;
+        }
+        bool operator!=(const PostOrderTreeIterator<T> &one) const{
+            return it_ != one.it_;
+        }
+        friend class PostOrderTreeView<T>;
+    };
 }
 
-class TreeIterators {
-
-};
 
 
-#endif //JIMP_EXERCISES_TREEITERATORS_H
+
+#endif //JIMP_EXERCISES_TREE_H
